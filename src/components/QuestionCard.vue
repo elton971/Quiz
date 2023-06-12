@@ -30,6 +30,18 @@ export default {
       {
         letra:"A",
         question:"Elton"
+      },
+      {
+        letra:"B",
+        question:"Elton"
+      },
+      {
+        letra:"C",
+        question:"Elton"
+      },
+      {
+        letra:"D",
+        question:"Elton"
       }
     ]
     }
