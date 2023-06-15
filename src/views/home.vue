@@ -1,7 +1,6 @@
 <template>
   <div class="bg-[url('background.png')] bg-contain h-screen">
     <div class="flex flex-col justify-center items-center pt-[4rem]">
-      <p class="flex text-white">COUNTRY QUIZ</p>
       <QuestionCard v-if="hasQuestions" />
     </div>
   </div>
