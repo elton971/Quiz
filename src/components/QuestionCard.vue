@@ -1,52 +1,72 @@
 <template>
   <div class="w-[30rem]">
     <p class="flex text-white text-[2.25rem] font-bold py-5">COUNTRY QUIZ</p>
-    <div class="absolute left-[50rem] top-[5rem]">
-      <img src="undraw_adventure_4hum 1.svg" alt="" />
+    <div v-if="!selectedOption.showScore">
+      <div class="absolute left-[50rem] top-[5rem]">
+        <img src="undraw_adventure_4hum 1.svg" alt="" />
+      </div>
+      <div class="bg-white p-10 rounded-[1rem] pt-16">
+        <h2 class="text-[1rem] text-[#2F527B] font-bold">{{ question }}</h2>
+        <div v-for="(option, index) in options" :key="index" class="flex flex-col py-2 mt-5">
+          <button
+            :style="getOptionStyles(option)"
+            @click="handleAnswer(option)"
+            class="border-[0.2rem] border-[#6066D0] rounded-[1rem] items-start p-4 text-left flex justify-between"
+          >
+            {{ option }}
+
+            <div v-if="selectedOption.showAnswer">
+              <v-icon
+                :name="
+                  selectedOption.value === option && correctAnswer !== option
+                    ? 'fa-regular-window-close'
+                    : selectedOption.value === option && correctAnswer === option
+                    ? 'fa-regular-check-circle'
+                    : correctAnswer === option && 'fa-regular-check-circle'
+                "
+              />
+            </div>
+          </button>
+        </div>
+        <div class="flex justify-end">
+          <button
+            v-if="!selectedOption.showNextButton"
+            @click="checkAnswer"
+            class="rounded-[1rem] p-4 bg-[#60BF88] text-white"
+          >
+            Verificar Respostas
+          </button>
+
+          <button
+            v-if="selectedOption.showNextButton"
+            @click="nextQuestion"
+            class="rounded-[1rem] p-4 bg-[#60BF88] text-white"
+          >
+            Próxima Pergunta
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="bg-white p-10 rounded-[1rem] pt-16">
-      <h2 class="text-[1rem] text-[#2F527B] font-bold">{{ question }}</h2>
-      <div v-for="(option, index) in options" :key="index" class="flex flex-col py-2 mt-5">
-        <button
-          :style="getOptionStyles(option)"
-          @click="handleAnswer(option)"
-          class="border-[0.2rem] border-[#6066D0] rounded-[1rem] items-start p-4 text-left flex justify-between"
-        >
-          {{ option }}
 
-          <div v-if="selectedOption.showAnswer">
-            <v-icon
-              :name="
-                selectedOption.value === option && correctAnswer !== option
-                  ? 'fa-regular-window-close'
-                  : selectedOption.value === option && correctAnswer === option
-                  ? 'fa-regular-check-circle'
-                  : correctAnswer === option && 'fa-regular-check-circle'
-              "
-            />
-          </div>
-        </button>
-      </div>
-      <div class="flex justify-end">
-        <button
-          v-if="!selectedOption.showNextButton"
-          @click="checkAnswer"
-          class="rounded-[1rem] p-4 bg-[#60BF88] text-white"
-        >
-          Verificar Respostas
-        </button>
-
-        <button
-          v-if="selectedOption.showNextButton"
-          @click="nextQuestion"
-          class="rounded-[1rem] p-4 bg-[#60BF88] text-white"
-        >
-          Próxima Pergunta
-        </button>
-      </div>
-
-      <div v-if="showScore">
-        <h3>Pontuação Final: {{ score }}/{{ totalQuestions }}</h3>
+    <div v-if="selectedOption.showScore" class="bg-white p-10 rounded-[1rem] pt-16">
+      <div class="flex flex-col justify-center items-center gap-[2rem]">
+        <div><img src="undraw_winners_ao2o 2.svg" alt="" class="w-[15rem]" /></div>
+        <div class="text-center gap-[2rem]">
+          <h1 class="font-bold text-[#1D355D]">Resultados</h1>
+          <p class="text-[#1D355D]">
+            Você tem
+            <span class="text-[2rem] text-[#6FCF97] font-bold">{{ selectedOption.points }}</span>
+            respostas corretas
+          </p>
+        </div>
+        <div>
+          <button
+            @click="newPlay"
+            class="rounded-[1rem] p-4 border-[#1D355D] border-2 text-[#1D355D]"
+          >
+            Jogar Novamente
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -122,7 +142,8 @@ export default {
       points: 0,
       showNextButton: false,
       result: false,
-      showAnswer: false
+      showAnswer: false,
+      showScore: false
     })
 
     function nextQuestion() {
@@ -132,6 +153,8 @@ export default {
         selectedOption.showNextButton = false
         selectedOption.result = false
         selectedOption.showAnswer = false
+      } else {
+        selectedOption.showScore = true
       }
     }
 

@@ -19,7 +19,8 @@ export default {
           const countriesWithCapital = data.filter(
             (country) => country.capital !== '' && country.capital !== undefined
           )
-          const questions = this.generateQuestions(countriesWithCapital.slice(0, 9))
+          const shuffleArray = this.shuffleOptions(countriesWithCapital)
+          const questions = this.generateQuestions(shuffleArray.slice(0, 9))
           this.$store.commit('setQuestions', questions)
         })
         .catch((error) => {
@@ -36,7 +37,7 @@ export default {
           }
           question.options = this.shuffleOptions([
             country.capital[0],
-            ...this.getRandomCapitals(3, countries)
+            ...this.getRandomCapitals(3, countries, country.capital[0])
           ])
           question.correctAnswer = country.capital[0]
           return question
@@ -49,19 +50,23 @@ export default {
     shuffleOptions(options) {
       return options.sort(() => Math.random() - 0.5)
     },
-    getRandomCapitals(numberOfCapitals, countries) {
+    getRandomCapitals(numberOfCapitals, countries, correctAnswer) {
       const uniqueCapitals = new Set()
       const capitals = []
+
       while (uniqueCapitals.size < numberOfCapitals) {
-        const randomIndex = Math.floor(Math.random() * countries.length)
-        const randomCapital = countries[randomIndex].capital[0]
+        let randomIndex = Math.floor(Math.random() * countries.length)
+        let randomCapital = countries[randomIndex].capital[0]
+
+        if (randomCapital === correctAnswer) {
+          randomIndex = Math.floor(Math.random() * countries.length)
+          randomCapital = countries[randomIndex].capital[0]
+        }
+
         uniqueCapitals.add(randomCapital)
       }
 
-      uniqueCapitals.forEach((capital) => {
-        capitals.push(capital)
-      })
-
+      capitals.push(...uniqueCapitals)
       return capitals
     },
     nextQuestion() {
