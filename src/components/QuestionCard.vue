@@ -61,7 +61,7 @@
         </div>
         <div>
           <button
-            @click="newPlay"
+            @click="newPlay(fetchCountries)"
             class="rounded-[1rem] p-4 border-[#1D355D] border-2 text-[#1D355D]"
           >
             Jogar Novamente
@@ -78,6 +78,11 @@ import { toRaw, reactive, ref, computed } from 'vue'
 import { OhVueIcon } from 'oh-vue-icons'
 export default {
   name: 'QuestionCard',
+  props: {
+    fetchCountries: {
+      type: Function
+    }
+  },
   components: {
     // eslint-disable-next-line vue/no-unused-components
     'v-icon': OhVueIcon
@@ -171,7 +176,22 @@ export default {
       selectedOption.result = true
     }
 
-    console.log(questions)
+    function newPlay(fetchCountries) {
+      fetchCountries()
+      this.selectedOption.value = ''
+      this.selectedOption.points = 0
+      this.selectedOption.showNextButton = false
+      this.selectedOption.result = false
+      this.selectedOption.showAnswer = false
+      this.selectedOption.showScore = false
+
+      currentQuestionIndex = ref(0)
+      questions = toRaw(store.state.questions)[0]
+      question = computed(() => questions[currentQuestionIndex.value]?.question)
+      options = computed(() => questions[currentQuestionIndex.value]?.options)
+      correctAnswer = computed(() => questions[currentQuestionIndex.value]?.correctAnswer)
+    }
+
     return {
       question,
       options,
@@ -179,7 +199,8 @@ export default {
       handleAnswer,
       selectedOption,
       checkAnswer,
-      nextQuestion
+      nextQuestion,
+      newPlay
     }
   }
 }
