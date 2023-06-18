@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[url('background.png')] bg-contain h-screen">
+  <div class="bg-[url('background.png')] bg-cover h-screen">
     <div class="flex flex-col justify-center items-center pt-[4rem]">
       <QuestionCard v-if="hasQuestions && start" :fetchCountries="fetchCountries" />
       <div v-if="!start" class="flex flex-col justify-center items-center">

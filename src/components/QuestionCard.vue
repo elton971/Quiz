@@ -1,8 +1,8 @@
 <template>
-  <div class="w-[30rem]">
-    <p class="flex text-white text-[2.25rem] font-bold py-5">COUNTRY QUIZ</p>
+  <div class="w-[22rem] md:w-[30rem]">
+    <p class="flex text-white text-[1.8rem] md:text-[2.25rem] font-bold py-5">COUNTRY QUIZ</p>
     <div v-if="!selectedOption.showScore">
-      <div class="absolute left-[50rem] top-[5rem]">
+      <div class="absolute left-[15rem] top-[5rem] md:left-[50rem] md:top-[5rem]">
         <img src="undraw_adventure_4hum 1.svg" alt="" />
       </div>
       <div class="bg-white p-10 rounded-[1rem] pt-16">
